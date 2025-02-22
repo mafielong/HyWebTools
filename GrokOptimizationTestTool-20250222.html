@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 Ruru Conversion Text Tool</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            padding: 40px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .input-container {
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: 500;
+        }
+
+        #inputText1 {
+            background-color: #e6ffe6;
+            padding: 15px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            border: 2px solid #90ee90;
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s ease;
+        }
+
+        #inputText1:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        #inputText2 {
+            background-color: #fffde7;
+            padding: 12px 15px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            border: 2px solid #ffff99;
+            border-radius: 8px;
+            transition: border-color 0.3s ease;
+        }
+
+        #inputText2:focus {
+            border-color: #ffeb3b;
+            outline: none;
+        }
+
+        .button-container {
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        #result {
+            margin-top: 25px;
+            font-size: 16px;
+            white-space: pre-wrap;
+            background: white;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 180px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        #lineCount {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: right;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px;
+            }
+            
+            button {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>📝 Ruru Conversion Text Tool</h1>
+    <div class="input-container">
+        <label for="inputText1">Original Text Input:</label>
+        <textarea id="inputText1" placeholder="Enter original text here..."></textarea>
+    </div>
+    <div class="input-container">
+        <label for="inputText2">Text Input:</label>
+        <input type="text" id="inputText2" placeholder="Enter text to append here...">
+    </div>
+    <div class="button-container">
+        <button onclick="processText()">✨ Start Replace</button>
+        <button onclick="copyText()">📋 Copy Result</button>
+    </div>
+    <div id="result"></div>
+    <div id="lineCount"></div>
+
+    <script>
+        function processText() {
+            var originalText = document.getElementById('inputText1').value;
+            var appendString = document.getElementById('inputText2').value;
+            var containsDash = originalText.includes('----');
+
+            var lines = originalText.split('\n').map(line => {
+                if (containsDash) {
+                    var parts = line.split('----');
+                    if (parts.length > 2) {
+                        return parts[0] + '密码' + parts[1] + appendString + parts[2];
+                    } else {
+                        return line.replace(/----/g, '密码') + appendString;
+                    }
+                } else if (!/[\u4e00-\u9fa5]/.test(line)) {
+                    return line + appendString;
+                } else {
+                    var firstChineseCharIndex = line.search(/[\u4e00-\u9fa5]/);
+                    if (firstChineseCharIndex !== -1) {
+                        return line.substring(0, firstChineseCharIndex) + appendString;
+                    }
+                }
+                return line;
+            }).join('\n');
+
+            var resultDiv = document.getElementById('result');
+            var lineCountDiv = document.getElementById('lineCount');
+
+            resultDiv.innerText = lines;
+            lineCountDiv.innerText = 'Line Count: ' + lines.split('\n').length;
+        }
+
+        function copyText() {
+            var resultDiv = document.getElementById('result').innerText;
+            navigator.clipboard.writeText(resultDiv).then(function() {
+                alert("Result copied to clipboard.");
+            }, function(err) {
+                alert("Could not copy text: ", err);
+            });
+        }
+    </script>
+</body>
+</html>
