@@ -3,119 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📝 Ruru Conversion Text Tool</title>
+    <title>🚀 Ruru Conversion Text Tool</title>
     <style>
+        :root {
+            --primary-color: #00ff88;
+            --secondary-color: #00a1ff;
+            --background-dark: #0a192f;
+            --text-color: #e6f1ff;
+        }
+
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             padding: 40px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--background-dark);
             min-height: 100vh;
             margin: 0;
+            color: var(--text-color);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 161, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         h1 {
-            color: #2c3e50;
+            color: var(--primary-color);
             text-align: center;
             margin-bottom: 40px;
             font-weight: 600;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+            font-size: 2.5em;
+            letter-spacing: 2px;
         }
 
         .input-container {
             margin-bottom: 25px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.03);
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .input-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.47);
         }
 
         label {
             display: block;
             margin-bottom: 8px;
-            color: #34495e;
+            color: var(--primary-color);
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9em;
         }
 
         #inputText1 {
-            background-color: #e6ffe6;
+            background-color: rgba(0, 255, 136, 0.05);
             padding: 15px;
             width: 100%;
             box-sizing: border-box;
             font-size: 16px;
-            border: 2px solid #90ee90;
+            border: 2px solid rgba(0, 255, 136, 0.3);
             border-radius: 8px;
             resize: vertical;
             min-height: 120px;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            color: var(--text-color);
         }
 
         #inputText1:focus {
-            border-color: #4CAF50;
+            border-color: var(--primary-color);
             outline: none;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
         }
 
         #inputText2 {
-            background-color: #fffde7;
+            background-color: rgba(0, 161, 255, 0.05);
             padding: 12px 15px;
             width: 100%;
             box-sizing: border-box;
             font-size: 16px;
-            border: 2px solid #ffff99;
+            border: 2px solid rgba(0, 161, 255, 0.3);
             border-radius: 8px;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            color: var(--text-color);
         }
 
         #inputText2:focus {
-            border-color: #ffeb3b;
+            border-color: var(--secondary-color);
             outline: none;
+            box-shadow: 0 0 15px rgba(0, 161, 255, 0.3);
         }
 
         .button-container {
             margin: 25px 0;
             text-align: center;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
         }
 
         button {
             padding: 12px 30px;
             font-size: 16px;
             cursor: pointer;
-            background-color: #3498db;
-            color: white;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: var(--background-dark);
             border: none;
             border-radius: 25px;
-            margin: 0 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
         }
 
         button:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
         }
 
         #result {
             margin-top: 25px;
             font-size: 16px;
             white-space: pre-wrap;
-            background: white;
-            border: 2px dashed #ddd;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 15px;
             padding: 20px;
             width: 100%;
             box-sizing: border-box;
             min-height: 180px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            overflow-y: auto;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            color: var(--text-color);
             font-family: 'Courier New', monospace;
         }
 
         #lineCount {
             margin-top: 15px;
             font-size: 14px;
-            color: #7f8c8d;
+            color: var(--primary-color);
             text-align: right;
             font-style: italic;
+            text-shadow: 0 0 5px rgba(0, 255, 136, 0.3);
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         @media (max-width: 600px) {
@@ -123,16 +201,38 @@
                 padding: 20px;
             }
             
-            button {
-                display: block;
-                width: 100%;
-                margin: 10px 0;
+            .button-container {
+                flex-direction: column;
             }
+            
+            button {
+                width: 100%;
+            }
+        }
+
+        /* 添加滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
         }
     </style>
 </head>
 <body>
-    <h1>📝 Ruru Conversion Text Tool</h1>
+    <h1>🚀 Ruru Conversion Text Tool</h1>
     <div class="input-container">
         <label for="inputText1">Original Text Input:</label>
         <textarea id="inputText1" placeholder="Enter original text here..."></textarea>
